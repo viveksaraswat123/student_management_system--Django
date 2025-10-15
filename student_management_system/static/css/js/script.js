@@ -1,0 +1,1 @@
+console.log("Hello from Student Management System JS file");

@@ -1,0 +1,13 @@
+body{
+
+    background-color: lightblue;
+    color: brown;
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    
+}

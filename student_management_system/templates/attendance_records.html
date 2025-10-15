@@ -1,0 +1,108 @@
+{% include 'navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Records</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+        h2 {
+            font-weight: 600;
+            color: #0d6efd;
+        }
+        .list-group-item {
+            font-size: 16px;
+        }
+        .btn-primary {
+            padding: 10px 20px;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+<div class="container">
+    <h2 class="mb-4 text-center">Attendance Records – {{ today }}</h2>
+
+    <!-- Filter Form -->
+    <form method="get" class="mb-4">
+        <div class="row g-3 align-items-center justify-content-center">
+            <div class="col-auto">
+                <input type="date" name="date" class="form-control" value="{{ request.GET.date }}">
+            </div>
+            <div class="col-auto">
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="present" {% if request.GET.status == 'present' %}selected{% endif %}>Present</option>
+                    <option value="absent" {% if request.GET.status == 'absent' %}selected{% endif %}>Absent</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <input type="text" name="search" placeholder="Search by student name" class="form-control" value="{{ request.GET.search }}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{% url 'attendance_records' %}" class="btn btn-primary">Clear Filters</a>
+
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-4">
+        <!-- Present Students -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white fw-bold">
+                    ✅ Present Students ({{ present_students.count }})
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for record in present_students %}
+                        <li class="list-group-item">{{ record.student.name }}</li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No present students.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Absent Students -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white fw-bold">
+                    ❌ Absent Students ({{ absent_students.count }})
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for record in absent_students %}
+                        <li class="list-group-item">{{ record.student.name }}</li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No absent students.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-5">
+        <a href="{% url 'mark_attendance' %}" class="btn btn-primary">← Back to Mark Attendance</a>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
